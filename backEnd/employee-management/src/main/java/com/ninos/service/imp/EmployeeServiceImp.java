@@ -1,0 +1,69 @@
+package com.ninos.service.imp;
+
+import com.ninos.dto.EmployeeDTO;
+import com.ninos.entity.Employee;
+import com.ninos.exception.ResourceNotFountException;
+import com.ninos.mapper.EmployeeMapper;
+import com.ninos.repository.EmployeeRepository;
+import com.ninos.service.EmployeeService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+@RequiredArgsConstructor
+@Service
+public class EmployeeServiceImp implements EmployeeService {
+
+    private final EmployeeRepository employeeRepository;
+
+
+    @Override
+    public EmployeeDTO createEmployee(EmployeeDTO employeeDTO) {
+        Employee employee = EmployeeMapper.convertToEmployee(employeeDTO);
+        Employee savedEmployee = employeeRepository.save(employee);
+
+        return EmployeeMapper.convertToDTO(savedEmployee);
+
+    }
+
+    @Override
+    public EmployeeDTO getEmployeeById(Long employeeId) {
+        Employee employeeById = employeeRepository.findById(employeeId)
+                .orElseThrow(() -> new ResourceNotFountException("Employee is not exists with the Id: "+ employeeId));
+        return EmployeeMapper.convertToDTO(employeeById);
+    }
+
+    @Override
+    public List<EmployeeDTO> getAllEmployees() {
+        List<Employee> employeeList = employeeRepository.findAll();
+        return employeeList.stream().map((employee) ->
+                EmployeeMapper.convertToDTO(employee)).collect(Collectors.toList());
+    }
+
+    @Override
+    public EmployeeDTO updateEmployee(Long employeeId, EmployeeDTO employeeDTO) {
+        Employee employee = employeeRepository.findById(employeeId)
+                .orElseThrow(() -> new ResourceNotFountException("Employee is not exists with the Id: "+ employeeId));
+
+        employee.setFirstName(employeeDTO.getFirstName());
+        employee.setLastName(employeeDTO.getLastName());
+        employee.setEmail(employeeDTO.getEmail());
+
+
+
+        Employee savedEmployee = employeeRepository.save(employee);
+
+        return EmployeeMapper.convertToDTO(savedEmployee);
+    }
+
+    @Override
+    public void deleteEmployee(Long employeeId) {
+        Employee employee = employeeRepository.findById(employeeId)
+                .orElseThrow(() -> new ResourceNotFountException("Employee is not exists with the Id: "+ employeeId));
+        employeeRepository.deleteById(employeeId);
+    }
+
+
+}
