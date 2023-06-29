@@ -1,7 +1,6 @@
 package com.ninos.controller;
 
 import com.ninos.dto.EmployeeDTO;
-import com.ninos.entity.Employee;
 import com.ninos.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -10,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin("*")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/employees")
