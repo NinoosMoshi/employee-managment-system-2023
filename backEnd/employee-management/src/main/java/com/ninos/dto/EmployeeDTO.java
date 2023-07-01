@@ -1,5 +1,6 @@
 package com.ninos.dto;
 
+import com.ninos.entity.Department;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,5 +15,6 @@ public class EmployeeDTO {
     private String lastName;
     private String email;
     private Long departmentId;
+//    private Department department;
 
 }
