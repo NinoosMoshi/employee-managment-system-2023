@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { createDepartment, getDepartment, updateDepartment } from "../service/DepartmentService";
+import { createDepartment, getDepartmentById, updateDepartment } from "../service/DepartmentService";
 import { useNavigate, useParams } from "react-router-dom";
 
 
@@ -13,13 +13,15 @@ const DepartmentComponent = () => {
   const {id} = useParams()
 
   useEffect(() =>{
-    getDepartment(id).then(response =>{
+    if(id){
+      getDepartmentById(id).then(response =>{
       setDepartmentName(response.data.departmentName);
       setDepartmentDescription(response.data.departmentDescription);
     }).catch(error =>{
       console.log(error)
     })
-
+    }
+    
   },[id])
 
 
