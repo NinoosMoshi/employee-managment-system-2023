@@ -10,6 +10,7 @@ public class EmployeeMapper {
     public static EmployeeDTO convertToDTO(Employee employee){
         EmployeeDTO employeeDTO = new EmployeeDTO();
         BeanUtils.copyProperties(employee, employeeDTO);
+        employeeDTO.setDepartmentId(employee.getDepartment().getId());
         return employeeDTO;
     }
 

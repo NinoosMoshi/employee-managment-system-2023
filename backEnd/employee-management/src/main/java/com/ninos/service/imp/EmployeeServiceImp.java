@@ -31,9 +31,6 @@ public class EmployeeServiceImp implements EmployeeService {
         Department department = departmentRepository.findById(employeeDTO.getDepartmentId())
                 .orElseThrow(() -> new ResourceNotFountException("department is not exists with id: " + employeeDTO.getDepartmentId()));
 
-//        Department department = departmentRepository.findById(employeeDTO.getDepartment().getId())
-//                .orElseThrow(() -> new ResourceNotFountException("department is not exists with id: " + employeeDTO.getDepartment().getId()));
-
         employee.setDepartment(department);
 
         Employee savedEmployee = employeeRepository.save(employee);
@@ -68,9 +65,6 @@ public class EmployeeServiceImp implements EmployeeService {
         Department department = departmentRepository.findById(employeeDTO.getDepartmentId())
                 .orElseThrow(() -> new ResourceNotFountException("department is not exists with id: " + employeeDTO.getDepartmentId()));
 
-//        Department department = departmentRepository.findById(employeeDTO.getDepartment().getId())
-//                .orElseThrow(() -> new ResourceNotFountException("department is not exists with id: " + employeeDTO.getDepartment().getId()));
-//
         employee.setDepartment(department);
 
         Employee savedEmployee = employeeRepository.save(employee);
