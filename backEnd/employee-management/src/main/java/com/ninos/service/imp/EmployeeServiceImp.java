@@ -1,15 +1,18 @@
 package com.ninos.service.imp;
 
 import com.ninos.dto.EmployeeDTO;
+import com.ninos.entity.Department;
 import com.ninos.entity.Employee;
 import com.ninos.exception.ResourceNotFountException;
 import com.ninos.mapper.EmployeeMapper;
+import com.ninos.repository.DepartmentRepository;
 import com.ninos.repository.EmployeeRepository;
 import com.ninos.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -17,15 +20,21 @@ import java.util.stream.Collectors;
 public class EmployeeServiceImp implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
+    private final DepartmentRepository departmentRepository;
 
 
     @Override
     public EmployeeDTO createEmployee(EmployeeDTO employeeDTO) {
+
         Employee employee = EmployeeMapper.convertToEmployee(employeeDTO);
+
+        Department department = departmentRepository.findById(employeeDTO.getDepartmentId())
+                .orElseThrow(() -> new ResourceNotFountException("department is not exists with id: " + employeeDTO.getDepartmentId()));
+        employee.setDepartment(department);
+
         Employee savedEmployee = employeeRepository.save(employee);
 
         return EmployeeMapper.convertToDTO(savedEmployee);
-
     }
 
     @Override
@@ -42,6 +51,7 @@ public class EmployeeServiceImp implements EmployeeService {
                 EmployeeMapper.convertToDTO(employee)).collect(Collectors.toList());
     }
 
+
     @Override
     public EmployeeDTO updateEmployee(Long employeeId, EmployeeDTO employeeDTO) {
         Employee employee = employeeRepository.findById(employeeId)
@@ -51,12 +61,15 @@ public class EmployeeServiceImp implements EmployeeService {
         employee.setLastName(employeeDTO.getLastName());
         employee.setEmail(employeeDTO.getEmail());
 
-
+        Department department = departmentRepository.findById(employeeDTO.getDepartmentId())
+                .orElseThrow(() -> new ResourceNotFountException("department is not exists with id: " + employeeDTO.getDepartmentId()));
+        employee.setDepartment(department);
 
         Employee savedEmployee = employeeRepository.save(employee);
 
         return EmployeeMapper.convertToDTO(savedEmployee);
     }
+
 
     @Override
     public void deleteEmployee(Long employeeId) {
